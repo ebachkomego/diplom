@@ -36,12 +36,12 @@
   padding: 3rem;
   position: relative;
   z-index: 1;
-  background: var(--glass-bg);
+  background: var(--color-bg-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   border-radius: 2rem;
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   gap: 2rem;

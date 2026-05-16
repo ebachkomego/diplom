@@ -19,7 +19,7 @@ module.exports = {
   production: {
     client: 'pg',
     connection: {
-      connectionString: process.env.DATABASE_URL || 'postgresql://postgres:StOk9y7L22wdQMwE@db.ezcvpwwueqkqfnjtwyra.supabase.co:5432/postgres',
+      connectionString: process.env.DATABASE_URL || 'postgresql://postgres.ezcvpwwueqkqfnjtwyra:StOk9y7L22wdQMwE@aws-0-eu-west-1.pooler.supabase.com:6543/postgres',
       ssl: { rejectUnauthorized: false }
     },
     migrations: {

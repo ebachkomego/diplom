@@ -371,3 +371,54 @@
 
 /* ===== PRINT ===== */
 @media print { .no-print { display: none !important; } }
+
+/* ==================== MOBILE RESPONSIVENESS (UI COMPONENTS) ==================== */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-card {
+    padding: 1rem;
+  }
+  
+  .page-header h1 {
+    font-size: 1.4rem;
+  }
+  
+  .controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.75rem;
+  }
+  
+  .filter-box select {
+    width: 100%;
+  }
+  
+  .btn-primary, .btn-outline, .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* Make action buttons inline if they are part of a flex row */
+  .action-buttons .btn-primary,
+  .action-buttons .btn-outline,
+  .action-buttons .btn-secondary {
+    width: auto;
+    flex: 1;
+  }
+  
+  .data-table th, .data-table td {
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .kpi-card {
+    padding: 1rem;
+  }
+  
+  .kpi-value {
+    font-size: 1.4rem;
+  }
+}

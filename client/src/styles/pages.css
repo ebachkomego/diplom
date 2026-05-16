@@ -163,3 +163,21 @@
   gap: 1rem;
 }
 
+/* ==================== MOBILE RESPONSIVENESS ==================== */
+@media (max-width: 768px) {
+  .login-card {
+    padding: 2rem 1.5rem;
+    border-radius: 1.5rem;
+  }
+  
+  .login-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .logo-container {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+  }
+}
+

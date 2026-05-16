@@ -190,3 +190,43 @@
 
 /* ===== GLOBAL ACTION BUTTONS ===== */
 .action-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* ==================== MOBILE RESPONSIVENESS (MODALS) ==================== */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 1rem;
+    padding-bottom: 80px; /* Space for bottom nav */
+    align-items: flex-start; /* Move modal up on mobile so keyboard doesn't hide it */
+  }
+  
+  .modal-content {
+    max-height: calc(100vh - 100px);
+    border-radius: 1rem;
+  }
+  
+  .modal-header, .modal-footer {
+    padding: 1rem;
+  }
+  
+  .modal-body {
+    padding: 1rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .total-sum-row {
+    text-align: center;
+  }
+  
+  .modal-footer {
+    flex-direction: column-reverse; /* Put primary button at top on mobile */
+    gap: 0.5rem;
+  }
+  
+  .modal-footer button {
+    width: 100%;
+  }
+}

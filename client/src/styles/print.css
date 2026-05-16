@@ -1,0 +1,61 @@
+@media print {
+  body {
+    background: #ffffff;
+  }
+
+  .sidebar,
+  .top-header,
+  .controls-bar,
+  .action-buttons,
+  .btn-primary,
+  .btn-outline,
+  .btn-icon,
+  .no-print {
+    display: none !important;
+  }
+
+  .app-layout,
+  .main-content-wrapper,
+  .main-content,
+  .content-container,
+  .page-container {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  .dashboard-grid,
+  .kpi-grid {
+    display: block !important;
+  }
+
+  .dashboard-card,
+  .glass-panel {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    border: 1px solid #cccccc !important;
+    box-shadow: none !important;
+    margin-bottom: 16px !important;
+  }
+
+  .table-responsive {
+    overflow: visible !important;
+  }
+
+  .data-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  .data-table th,
+  .data-table td {
+    border: 1px solid #d1d5db !important;
+    padding: 8px !important;
+    color: #111827 !important;
+  }
+}

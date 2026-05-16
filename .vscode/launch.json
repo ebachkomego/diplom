@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Запуск Бэкенда",
+      "cwd": "${workspaceFolder}/server",
+      "program": "${workspaceFolder}/server/server.js",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "pwa-chrome",
+      "request": "launch",
+      "name": "Запуск Клиента",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/client/src",
+      "preLaunchTask": "vite:dev"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Запуск всего проекта (Бэк + Фронт)",
+      "configurations": ["Запуск Бэкенда", "Запуск Клиента"]
+    }
+  ]
+}

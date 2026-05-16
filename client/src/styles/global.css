@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import './variables.css';
+@import './animations.css';
+@import './components.css';
+
+/* ===== RESET ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== BASE ===== */
+html { font-size: 16px; }
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg-body);
+  color: var(--color-text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover { color: var(--color-primary-hover); }
+
+button {
+  font-family: var(--font-family);
+  cursor: pointer;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-solid);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+
+/* ===== GLASS PANEL utility ===== */
+.glass-panel {
+  background:          var(--color-bg-surface);
+  backdrop-filter:     var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border:              var(--glass-border);
+  box-shadow:          var(--glass-shadow);
+  border-radius:       var(--radius-lg);
+  transition: all var(--transition-normal);
+}
+
+/* ===== FORM CONTROLS (global, theme-aware) ===== */
+/* These rules apply everywhere so all inputs/selects look consistent */
+input,
+textarea,
+select {
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+  background-color: rgba(255, 255, 255, 0.05); /* Ultra transparent */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.7rem 1rem;
+  width: 100%;
+  outline: none;
+  transition: all var(--transition-fast);
+  color-scheme: inherit;
+  backdrop-filter: blur(10px);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='light'] input,
+[data-theme='light'] textarea,
+[data-theme='light'] select {
+  background-color: rgba(0, 0, 0, 0.05); /* Slight dark tint for light mode visibility */
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+/* Native select options */
+select option {
+  background-color: #1e293b; /* Dark background for options in dark theme */
+  color: #f1f5f9;
+}
+
+[data-theme='light'] select option {
+  background-color: #ffffff;
+  color: #1e293b;
+}
+
+/* ===== LOADER ===== */
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* ===== PAGE CONTAINER ===== */
+.page-container { padding: 0; }
+
+/* ===== RECHARTS dark/light ===== */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: var(--color-bg-surface) !important;
+  border: 1px solid var(--color-border-solid) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--color-text-main) !important;
+  box-shadow: var(--shadow-md) !important;
+  backdrop-filter: var(--glass-blur) !important;
+}
+.recharts-tooltip-label        { color: var(--color-text-main)  !important; font-weight: 600; }
+.recharts-tooltip-item         { color: var(--color-text-muted) !important; }
+.recharts-legend-item-text     { color: var(--color-text-muted) !important; }
+.recharts-cartesian-axis-tick-value { fill: var(--color-text-muted) !important; }
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical   line { stroke: var(--color-border-solid) !important; opacity: 0.5; }

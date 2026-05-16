@@ -1,0 +1,73 @@
+/* Ключевые кадры для премиальных анимаций интерфейса */
+
+@keyframes fadeIn {
+  from { opacity: 0; filter: blur(12px); transform: scale(0.98); }
+  to { opacity: 1; filter: blur(0); transform: scale(1); }
+}
+
+@keyframes slideUpDramatic {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+    filter: blur(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes revealFromLeft {
+  0% { clip-path: inset(0 100% 0 0); opacity: 0; }
+  100% { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 var(--color-primary-light); }
+  70% { box-shadow: 0 0 0 15px rgba(139, 92, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+}
+
+@keyframes floatBlob {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  33% { transform: translate(50px, -70px) scale(1.15) rotate(5deg); }
+  66% { transform: translate(-40px, 40px) scale(0.9) rotate(-5deg); }
+  100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+}
+
+/* Классы для применения анимаций */
+.animate-fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUpDramatic 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.animate-reveal {
+  animation: revealFromLeft 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Задержки анимации (staggering) */
+.delay-50 { animation-delay: 50ms; opacity: 0; animation-fill-mode: forwards; }
+.delay-100 { animation-delay: 100ms; opacity: 0; animation-fill-mode: forwards; }
+.delay-150 { animation-delay: 150ms; opacity: 0; animation-fill-mode: forwards; }
+.delay-200 { animation-delay: 200ms; opacity: 0; animation-fill-mode: forwards; }
+.delay-250 { animation-delay: 250ms; opacity: 0; animation-fill-mode: forwards; }
+.delay-300 { animation-delay: 300ms; opacity: 0; animation-fill-mode: forwards; }
+.delay-400 { animation-delay: 400ms; opacity: 0; animation-fill-mode: forwards; }
+.delay-500 { animation-delay: 500ms; opacity: 0; animation-fill-mode: forwards; }

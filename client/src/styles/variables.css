@@ -1,0 +1,108 @@
+/* ==================== DESIGN TOKENS ==================== */
+:root {
+  /* --- Brand Palette --- */
+  --color-primary:        #a855f7; /* Neon Purple */
+  --color-primary-hover:  #c084fc;
+  --color-primary-light:  rgba(168, 85, 247, 0.15);
+  --color-primary-glow:   rgba(168, 85, 247, 0.6);
+
+  --color-secondary:       #f472b6; /* Neon Pink */
+  --color-secondary-light: rgba(244, 114, 182, 0.2);
+
+  --color-success:      #10b981;
+  --color-success-bg:   rgba(16, 185, 129, 0.15);
+  --color-success-glow: rgba(16, 185, 129, 0.35);
+
+  --color-warning:    #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
+
+  --color-danger:    #ef4444;
+  --color-danger-bg: rgba(239, 68, 68, 0.15);
+
+  --color-info:    #0ea5e9;
+  --color-info-bg: rgba(14, 165, 233, 0.15);
+
+  /* --- Dark Theme (default) --- */
+  /* --- Vibrant Gradient Background (Pink -> Purple -> Blue) --- */
+  --color-bg-body: linear-gradient(180deg, #f472b6 0%, #a855f7 50%, #3b82f6 100%);
+  --color-bg-surface: rgba(15, 23, 42, 0.45); /* Dark frosted glass */
+  --color-bg-hover:   rgba(30, 41, 59, 0.6);
+
+  --color-text-main:  #ffffff; /* White text for dark glass */
+  --color-text-muted: #cbd5e1; /* Lighter muted text for readability */
+
+  --color-border:       rgba(255, 255, 255, 0.10);
+  --color-border-hover: rgba(255, 255, 255, 0.20);
+  /* Solid border for places where rgba is not enough (select options etc.) */
+  --color-border-solid: #334155;
+
+  /* --- Glassmorphism --- */
+  --glass-blur:   blur(15px);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+  --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15),
+                  inset 0 0 10px rgba(255, 255, 255, 0.1);
+
+  /* --- Radii --- */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --shadow-sm: 0 2px 8px  rgba(0, 0, 0, 0.20);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.30);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.45);
+
+  /* --- Transitions --- */
+  --transition-fast:   0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.30s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- Misc --- */
+  --font-family:    'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  --header-height:  70px;
+  --sidebar-width:  280px;
+}
+
+/* ==================== LIGHT THEME ==================== */
+[data-theme='light'] {
+  /* Removed --color-bg-body override to keep the vibrant gradient background */
+  --color-bg-surface: rgba(255, 255, 255, 0.75);
+  --color-bg-hover:   rgba(226, 232, 240, 0.80);
+
+  --color-text-main:  #1e293b;
+  --color-text-muted: #334155; /* Darker muted text for light mode */
+
+  --color-border:       rgba(0, 0, 0, 0.10);
+  --color-border-hover: rgba(0, 0, 0, 0.18);
+  --color-border-solid: #cbd5e1;
+
+  --glass-blur:   blur(20px);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.60);
+  --glass-shadow: 0 8px 32px rgba(100, 116, 139, 0.15),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.80);
+
+  /* Keep brand colours the same — only slightly more vivid */
+  --color-primary-light: rgba(139, 92, 246, 0.12);
+  --color-primary-glow:  rgba(139, 92, 246, 0.25);
+
+  --color-success-bg:  rgba(16, 185, 129, 0.12);
+  --color-warning-bg:  rgba(245, 158, 11, 0.12);
+  --color-danger-bg:   rgba(239, 68, 68, 0.12);
+  --color-info-bg:     rgba(14, 165, 233, 0.12);
+
+  --shadow-sm: 0 2px 8px  rgba(100, 116, 139, 0.12);
+  --shadow-md: 0 8px 24px rgba(100, 116, 139, 0.18);
+  --shadow-lg: 0 20px 50px rgba(100, 116, 139, 0.22);
+}
+
+/* Light theme: blob backgrounds visible against light bg */
+[data-theme='light'] .app-layout::before {
+  opacity: 0.25;
+}
+[data-theme='light'] .app-layout::after {
+  opacity: 0.20;
+}
+[data-theme='light'] .vibrant-blob {
+  opacity: 0.15;
+}

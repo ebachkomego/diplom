@@ -1,4 +1,5 @@
 {
+  "buildCommand": "npm install --prefix client && npm run build --prefix client && mkdir -p public && cp -r client/dist/* public/",
   "framework": null,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.js" },

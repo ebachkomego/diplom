@@ -16,9 +16,8 @@
       "source": "/api/(.*)",
       "destination": "server/app.js"
     },
-    { "handle": "filesystem" },
     {
-      "source": "/(.*)",
+      "source": "/((?!api/|assets/|.*\\.).*)",
       "destination": "/index.html"
     }
   ]

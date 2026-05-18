@@ -1,9 +1,19 @@
 // Централизованный обработчик ошибок Express
 
+const { isDuplicatePkeyError, extractTableFromError, fixSequence } = require('../utils/sequenceFix');
+
 // Перехватывает все необработанные ошибки и формирует единообразный ответ
-const errorHandler = (err, req, res, next) => {
+const errorHandler = async (err, req, res, next) => {
   console.error('❌ Ошибка:', err.message);
-  console.error('Stack:', err.stack);
+
+  // Автоматическое исправление PostgreSQL-sequence при duplicate key на PK
+  if (isDuplicatePkeyError(err)) {
+    const tableName = extractTableFromError(err);
+    if (tableName) {
+      console.log(`🔧 Обнаружен сломанный sequence для таблицы "${tableName}", исправляем...`);
+      await fixSequence(tableName);
+    }
+  }
 
   // Определяем HTTP-код ответа
   const statusCode = err.statusCode || 500;
@@ -23,3 +33,4 @@ const errorHandler = (err, req, res, next) => {
 };
 
 module.exports = errorHandler;
+

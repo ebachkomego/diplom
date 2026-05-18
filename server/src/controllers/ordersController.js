@@ -55,7 +55,7 @@ const getAll = async (req, res, next) => {
     }
 
     // Фильтр по роли: мастер видит только задания, но заказы — все
-    const total = await query.clone().count('o.id as count').first();
+    const total = await query.clone().clearSelect().clearOrder().count('o.id as count').first();
     const orders = await query.limit(parseInt(limit)).offset(offset);
 
     res.json({

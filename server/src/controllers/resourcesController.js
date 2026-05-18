@@ -1,5 +1,6 @@
 // Контроллер ресурсов (оборудование)
 const db = require('../database/connection');
+const { insertAndGetId } = require('../utils/sqlHelpers');
 
 const getAll = async (req, res, next) => {
   try {
@@ -44,7 +45,7 @@ const getById = async (req, res, next) => {
 const create = async (req, res, next) => {
   try {
     const { name, type, capacity, status, location, notes, quality_grade, precision_grade, workshop_type, year_manufactured, manufacturer } = req.body;
-    const [id] = await db('resources').insert({ 
+    const id = await insertAndGetId('resources', { 
       name, type, capacity, status: status || 'активен', location, notes,
       quality_grade: quality_grade || 'стандарт',
       precision_grade: precision_grade || 7,

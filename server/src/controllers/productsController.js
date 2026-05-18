@@ -1,5 +1,6 @@
 // Контроллер продукции
 const db = require('../database/connection');
+const { insertAndGetId } = require('../utils/sqlHelpers');
 
 // GET /api/products — список продукции с фильтрацией
 const getAll = async (req, res, next) => {
@@ -39,7 +40,7 @@ const getById = async (req, res, next) => {
 const create = async (req, res, next) => {
   try {
     const { name, article, description, unit, price, production_time_hours, category } = req.body;
-    const [id] = await db('products').insert({ name, article, description, unit, price, production_time_hours, category });
+    const id = await insertAndGetId('products', { name, article, description, unit, price, production_time_hours, category });
     const product = await db('products').where({ id }).first();
     res.status(201).json(product);
   } catch (error) { next(error); }

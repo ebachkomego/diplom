@@ -1,5 +1,6 @@
 // Контроллер производственных заданий
 const db = require('../database/connection');
+const { insertAndGetId } = require('../utils/sqlHelpers');
 
 // GET /api/production/tasks — список заданий
 const getTasks = async (req, res, next) => {
@@ -97,12 +98,12 @@ const createTask = async (req, res, next) => {
 
     // Создаём задание и резервируем материалы в транзакции
     const taskId = await db.transaction(async trx => {
-      const [id] = await trx('production_tasks').insert({
+      const id = await insertAndGetId('production_tasks', {
         order_id, order_item_id, product_id, assigned_to,
         start_date, end_date, quantity: qty,
         status: 'ожидание', notes,
         created_at: new Date().toISOString()
-      });
+      }, trx);
 
       // Получаем этапы продукта и создаём task_stages
       const stages = await trx('production_stages').where({ product_id }).orderBy('stage_number');

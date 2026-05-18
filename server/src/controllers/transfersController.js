@@ -1,5 +1,6 @@
 // Контроллер для управления передачами деталей между цехами (WIP transfers)
 const db = require('../database/connection');
+const { insertAndGetId } = require('../utils/sqlHelpers');
 
 // GET /api/transfers — список всех передач с фильтрацией
 const getAll = async (req, res, next) => {
@@ -86,7 +87,7 @@ const create = async (req, res, next) => {
       notes
     } = req.body;
 
-    const [id] = await db('wip_transfers').insert({
+    const id = await insertAndGetId('wip_transfers', {
       task_id,
       from_resource_id,
       to_resource_id,

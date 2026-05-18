@@ -1,6 +1,7 @@
 // Контроллер управления пользователями (администрирование)
 const db = require('../database/connection');
 const bcrypt = require('bcryptjs');
+const { insertAndGetId } = require('../utils/sqlHelpers');
 
 const VALID_ROLES = ['администратор', 'менеджер', 'начальник_производства', 'мастер', 'кладовщик'];
 
@@ -37,7 +38,7 @@ const create = async (req, res, next) => {
     if (existing) return res.status(400).json({ error: 'Пользователь с таким логином уже существует' });
 
     const password_hash = await bcrypt.hash(password, 10);
-    const [id] = await db('users').insert({ username, password_hash, full_name, role, email, is_active: true });
+    const id = await insertAndGetId('users', { username, password_hash, full_name, role, email, is_active: true });
     const user = await db('users').select('id', 'username', 'full_name', 'role', 'email', 'is_active').where({ id }).first();
     res.status(201).json(user);
   } catch (error) { next(error); }

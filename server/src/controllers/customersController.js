@@ -1,5 +1,6 @@
 // Контроллер клиентов
 const db = require('../database/connection');
+const { insertAndGetId } = require('../utils/sqlHelpers');
 
 const getAll = async (req, res, next) => {
   try {
@@ -41,7 +42,7 @@ const create = async (req, res, next) => {
   try {
     const { name, contact_person, phone, email, address, inn } = req.body;
     if (!name) return res.status(400).json({ error: 'Наименование клиента обязательно' });
-    const [id] = await db('customers').insert({ name, contact_person, phone, email, address, inn });
+    const id = await insertAndGetId('customers', { name, contact_person, phone, email, address, inn });
     const customer = await db('customers').where({ id }).first();
     res.status(201).json(customer);
   } catch (error) { next(error); }

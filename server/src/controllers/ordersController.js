@@ -1,5 +1,6 @@
 // Контроллер заказов — полная реализация CRUD и управления статусами
 const db = require('../database/connection');
+const { insertAndGetId } = require('../utils/sqlHelpers');
 
 // Допустимые переходы между статусами заказа
 const STATUS_TRANSITIONS = {
@@ -142,8 +143,8 @@ const create = async (req, res, next) => {
     });
 
     // Вставляем заказ и позиции в транзакции
-    const [orderId] = await db.transaction(async trx => {
-      const [id] = await trx('orders').insert({
+    const orderId = await db.transaction(async trx => {
+      const id = await insertAndGetId('orders', {
         order_number,
         customer_id,
         created_by: req.user.id,
@@ -153,13 +154,13 @@ const create = async (req, res, next) => {
         total_cost,
         notes,
         created_at: new Date().toISOString()
-      });
+      }, trx);
 
       await trx('order_items').insert(
         orderItems.map(item => ({ order_id: id, ...item }))
       );
 
-      return [id];
+      return id;
     });
 
     const newOrder = await db('orders').where({ id: orderId }).first();

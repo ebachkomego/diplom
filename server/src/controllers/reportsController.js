@@ -1,5 +1,5 @@
 const db = require('../database/connection');
-const { formatMonth, daysFromNow, currentMonth } = require('../utils/sqlHelpers');
+const { formatMonth, daysFromNow, currentMonth, insertAndGetId } = require('../utils/sqlHelpers');
 
 const chartDatasets = {
   orders: {
@@ -289,7 +289,7 @@ const createChartTemplate = async (req, res, next) => {
       return res.status(400).json({ error: 'Название и конфигурация обязательны' });
     }
 
-    const [id] = await db('chart_templates').insert({
+    const id = await insertAndGetId('chart_templates', {
       name,
       config_json: JSON.stringify(config),
       scope,

@@ -1,10 +1,29 @@
 const app = require('../server/app.js');
 const knex = require('../server/src/database/connection');
 
-// Run migrations automatically on every cold start
-// This ensures PostgreSQL sequences stay in sync after seed data is loaded
-knex.migrate.latest()
-  .then(() => console.log('✅ DB migrations applied'))
-  .catch(err => console.error('⚠️ Migration error (non-fatal):', err.message));
+// Lazy-init: run migrations BEFORE the first request is processed.
+// This guarantees sequences are fixed before any INSERT happens.
+let ready = false;
+let initPromise = null;
 
-module.exports = app;
+function ensureReady() {
+  if (ready) return Promise.resolve();
+  if (!initPromise) {
+    initPromise = knex.migrate.latest()
+      .then(() => {
+        ready = true;
+        console.log('✅ DB migrations applied (sequences fixed)');
+      })
+      .catch(err => {
+        console.error('⚠️ Migration error:', err.message);
+        ready = true; // don't block forever on error
+      });
+  }
+  return initPromise;
+}
+
+// Vercel expects a standard (req, res) handler
+module.exports = async (req, res) => {
+  await ensureReady();
+  return app(req, res);
+};

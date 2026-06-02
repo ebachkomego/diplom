@@ -145,7 +145,7 @@ const OrdersPage = () => {
                   <th>Сумма</th>
                   <th>Статус</th>
                   <th>Приоритет</th>
-                  <th>Действия</th>
+                  <th className="no-print">Действия</th>
                 </tr>
               </thead>
               <tbody>
@@ -169,7 +169,7 @@ const OrdersPage = () => {
                     <td>
                       <span className={`badge-priority priority-${order.priority}`}>{order.priority}</span>
                     </td>
-                    <td>
+                    <td className="no-print">
                       <div className="action-buttons">
                         <button className="btn-icon" title="Редактировать"
                           onClick={() => handleEdit(order)}

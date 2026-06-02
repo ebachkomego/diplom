@@ -181,9 +181,10 @@ const update = async (req, res, next) => {
       return res.status(400).json({ error: 'Нельзя редактировать заказ в данном статусе' });
     }
 
-    await db('orders').where({ id: req.params.id }).update({
+    const affected = await db('orders').where({ id: req.params.id }).update({
       customer_id, priority, planned_date, notes
     });
+    if (affected === 0) return res.status(404).json({ error: 'Заказ не найден или недостаточно прав для изменения' });
 
     const updated = await db('orders').where({ id: req.params.id }).first();
     res.json(updated);
@@ -255,7 +256,8 @@ const remove = async (req, res, next) => {
       return res.status(400).json({ error: 'Можно удалять только заказы со статусом "Новый"' });
     }
 
-    await db('orders').where({ id: req.params.id }).del();
+    const affected = await db('orders').where({ id: req.params.id }).del();
+    if (affected === 0) return res.status(404).json({ error: 'Заказ не найден или недостаточно прав для удаления' });
     res.json({ message: 'Заказ удалён' });
   } catch (error) {
     next(error);

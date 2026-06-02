@@ -48,13 +48,12 @@ const insertAndGetId = async (tableName, data, trx = db) => {
   if (isSqlite) {
     const [id] = await trx(tableName).insert(data);
     return id;
-  } else {
-    const result = await trx(tableName).insert(data).returning('id');
-    if (result && result[0]) {
-      return typeof result[0] === 'object' ? result[0].id : result[0];
-    }
-    return null;
   }
+  const result = await trx(tableName).insert(data).returning('id');
+  if (result && result.length > 0) {
+    return result[0]?.id ?? result[0];
+  }
+  throw new Error(`Не удалось получить ID при вставке в "${tableName}"`);
 };
 
 module.exports = {

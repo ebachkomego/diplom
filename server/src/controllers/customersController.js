@@ -51,7 +51,8 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const { name, contact_person, phone, email, address, inn } = req.body;
-    await db('customers').where({ id: req.params.id }).update({ name, contact_person, phone, email, address, inn });
+    const affected = await db('customers').where({ id: req.params.id }).update({ name, contact_person, phone, email, address, inn });
+    if (affected === 0) return res.status(404).json({ error: 'Клиент не найден или недостаточно прав для изменения' });
     const customer = await db('customers').where({ id: req.params.id }).first();
     res.json(customer);
   } catch (error) { next(error); }
@@ -61,7 +62,8 @@ const remove = async (req, res, next) => {
   try {
     const hasOrders = await db('orders').where({ customer_id: req.params.id }).first();
     if (hasOrders) return res.status(400).json({ error: 'Нельзя удалить клиента с существующими заказами' });
-    await db('customers').where({ id: req.params.id }).del();
+    const affected = await db('customers').where({ id: req.params.id }).del();
+    if (affected === 0) return res.status(404).json({ error: 'Клиент не найден или недостаточно прав для удаления' });
     res.json({ message: 'Клиент удалён' });
   } catch (error) { next(error); }
 };

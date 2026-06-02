@@ -115,7 +115,7 @@ const TransfersPage = () => {
                   <th>Заказ</th>
                   <th>Даты</th>
                   <th>Ответственные</th>
-                  <th>Действия</th>
+                  <th className="no-print">Действия</th>
                 </tr>
               </thead>
               <tbody>
@@ -169,7 +169,7 @@ const TransfersPage = () => {
                         </div>
                       )}
                     </td>
-                    <td>
+                    <td className="no-print">
                       <div className="action-buttons">
                         {t.status === 'в_ожидании' && (
                           <button className="btn-icon" onClick={() => handleTransfer(t.id)} title="Отправить">

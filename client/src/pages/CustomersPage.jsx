@@ -91,7 +91,7 @@ const CustomersPage = () => {
                 <th>Контактное лицо</th>
                 <th>Телефон</th>
                 <th>Email</th>
-                <th>Действия</th>
+                <th className="no-print">Действия</th>
               </tr>
             </thead>
             <tbody>
@@ -104,7 +104,7 @@ const CustomersPage = () => {
                   <td>{c.contact_person}</td>
                   <td>{c.phone}</td>
                   <td>{c.email}</td>
-                  <td>
+                  <td className="no-print">
                     <div className="action-buttons">
                       <button className="btn-icon" onClick={() => handleEdit(c)}><Edit size={16}/></button>
                       <button className="btn-icon danger" onClick={() => handleDelete(c.id)}><Trash2 size={16}/></button>

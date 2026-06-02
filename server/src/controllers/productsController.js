@@ -50,7 +50,8 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const { name, article, description, unit, price, production_time_hours, category } = req.body;
-    await db('products').where({ id: req.params.id }).update({ name, article, description, unit, price, production_time_hours, category });
+    const affected = await db('products').where({ id: req.params.id }).update({ name, article, description, unit, price, production_time_hours, category });
+    if (affected === 0) return res.status(404).json({ error: 'Продукт не найден или недостаточно прав для изменения' });
     const product = await db('products').where({ id: req.params.id }).first();
     res.json(product);
   } catch (error) { next(error); }
@@ -59,7 +60,8 @@ const update = async (req, res, next) => {
 // DELETE /api/products/:id
 const remove = async (req, res, next) => {
   try {
-    await db('products').where({ id: req.params.id }).del();
+    const affected = await db('products').where({ id: req.params.id }).del();
+    if (affected === 0) return res.status(404).json({ error: 'Продукт не найден или недостаточно прав для удаления' });
     res.json({ message: 'Продукт удалён' });
   } catch (error) { next(error); }
 };

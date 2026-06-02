@@ -61,10 +61,11 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const { name, type, capacity, status, location, notes, quality_grade, precision_grade, workshop_type, year_manufactured, manufacturer } = req.body;
-    await db('resources').where({ id: req.params.id }).update({ 
+    const affected = await db('resources').where({ id: req.params.id }).update({ 
       name, type, capacity, status, location, notes,
       quality_grade, precision_grade, workshop_type, year_manufactured, manufacturer
     });
+    if (affected === 0) return res.status(404).json({ error: 'Ресурс не найден или недостаточно прав для изменения' });
     const resource = await db('resources').where({ id: req.params.id }).first();
     res.json(resource);
   } catch (error) { next(error); }
@@ -72,7 +73,8 @@ const update = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   try {
-    await db('resources').where({ id: req.params.id }).del();
+    const affected = await db('resources').where({ id: req.params.id }).del();
+    if (affected === 0) return res.status(404).json({ error: 'Ресурс не найден или недостаточно прав для удаления' });
     res.json({ message: 'Ресурс удалён' });
   } catch (error) { next(error); }
 };

@@ -91,7 +91,7 @@ const AdminPage = () => {
                   <th>ФИО</th>
                   <th>Роль</th>
                   <th>Статус</th>
-                  <th>Действия</th>
+                  <th className="no-print">Действия</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,7 +117,7 @@ const AdminPage = () => {
                         <span className="badge-status status-отклонён">Заблокирован</span>
                       }
                     </td>
-                    <td>
+                    <td className="no-print">
                       <div className="action-buttons">
                         <button 
                           className="btn-icon" 

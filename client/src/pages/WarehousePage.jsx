@@ -117,7 +117,7 @@ const WarehousePage = () => {
                   <th>Резерв</th>
                   <th>Доступно</th>
                   {activeTab === 'materials' && <th>Мин. остаток</th>}
-                  <th>Действия</th>
+                  <th className="no-print">Действия</th>
                 </tr>
               </thead>
               <tbody>
@@ -148,7 +148,7 @@ const WarehousePage = () => {
                         {item.available}
                       </td>
                       {activeTab === 'materials' && <td style={{ color: 'var(--color-text-muted)' }}>{item.min_stock}</td>}
-                      <td>
+                      <td className="no-print">
                         <div className="action-buttons">
                           <button className="btn-icon" title="Приход"
                             style={{ color: 'var(--color-success)', borderColor: 'var(--color-success-bg)' }}

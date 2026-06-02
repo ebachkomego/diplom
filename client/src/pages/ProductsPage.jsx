@@ -92,7 +92,7 @@ const ProductsPage = () => {
                 <th>Ед. изм.</th>
                 <th>Цена (BYN)</th>
                 <th>Время пр-ва (ч)</th>
-                <th>Действия</th>
+                <th className="no-print">Действия</th>
               </tr>
             </thead>
             <tbody>
@@ -106,7 +106,7 @@ const ProductsPage = () => {
                   <td>{product.unit}</td>
                   <td>{product.price}</td>
                   <td>{product.production_time_hours}</td>
-                  <td>
+                  <td className="no-print">
                     <div className="action-buttons">
                       <button className="btn-icon" onClick={() => handleEdit(product)}><Edit size={16}/></button>
                       <button className="btn-icon danger" onClick={() => handleDelete(product.id)}><Trash2 size={16}/></button>

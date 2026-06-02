@@ -112,7 +112,7 @@ const ProductionPage = () => {
                 <th>Статус</th>
                 <th>Сроки</th>
                 <th>Исполнитель</th>
-                <th>Действия</th>
+                <th className="no-print">Действия</th>
               </tr>
             </thead>
             <tbody>
@@ -132,7 +132,7 @@ const ProductionPage = () => {
                   <td style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem' }}>
                     {task.assigned_name || 'Не назначен'}
                   </td>
-                  <td>
+                  <td className="no-print">
                     <div className="action-buttons">
                       {task.status === 'ожидание' && (
                         <button className="btn-primary" onClick={() => handleStatusChange(task.id, task.status)}>

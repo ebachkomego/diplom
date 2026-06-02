@@ -182,7 +182,7 @@ const ResourcesPage = () => {
                   <th>Характеристики</th>
                   <th>Мощность</th>
                   <th>Статус</th>
-                  <th>Действия</th>
+                  <th className="no-print">Действия</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,7 +234,7 @@ const ResourcesPage = () => {
                         {res.status.replace(/_/g, ' ')}
                       </span>
                     </td>
-                    <td>
+                    <td className="no-print">
                       <div className="action-buttons">
                         <button className="btn-icon" onClick={() => handleEdit(res)} title="Редактировать">
                           <Edit size={14} />

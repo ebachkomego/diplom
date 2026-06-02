@@ -49,7 +49,8 @@ const update = async (req, res, next) => {
     const { full_name, role, email, password } = req.body;
     const updateData = { full_name, role, email };
     if (password) updateData.password_hash = await bcrypt.hash(password, 10);
-    await db('users').where({ id: req.params.id }).update(updateData);
+    const affected = await db('users').where({ id: req.params.id }).update(updateData);
+    if (affected === 0) return res.status(404).json({ error: 'Пользователь не найден или недостаточно прав для изменения' });
     const user = await db('users').select('id', 'username', 'full_name', 'role', 'email', 'is_active').where({ id: req.params.id }).first();
     res.json(user);
   } catch (error) { next(error); }
@@ -60,7 +61,8 @@ const toggleActive = async (req, res, next) => {
   try {
     const user = await db('users').where({ id: req.params.id }).first();
     if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
-    await db('users').where({ id: req.params.id }).update({ is_active: !user.is_active });
+    const affected = await db('users').where({ id: req.params.id }).update({ is_active: !user.is_active });
+    if (affected === 0) return res.status(404).json({ error: 'Пользователь не найден или недостаточно прав для изменения' });
     res.json({ message: `Пользователь ${!user.is_active ? 'активирован' : 'деактивирован'}` });
   } catch (error) { next(error); }
 };
@@ -70,7 +72,8 @@ const remove = async (req, res, next) => {
     if (parseInt(req.params.id) === req.user.id) {
       return res.status(400).json({ error: 'Нельзя удалить собственную учётную запись' });
     }
-    await db('users').where({ id: req.params.id }).del();
+    const affected = await db('users').where({ id: req.params.id }).del();
+    if (affected === 0) return res.status(404).json({ error: 'Пользователь не найден или недостаточно прав для удаления' });
     res.json({ message: 'Пользователь удалён' });
   } catch (error) { next(error); }
 };

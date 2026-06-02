@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { ordersApi } from '../api/orders';
 import { Plus, Search, Filter, Eye, Edit, Trash2 } from 'lucide-react';
 import OrderModal from './OrderModal';
@@ -39,9 +39,6 @@ const OrdersPage = () => {
   const handleCreate = () => { setEditingOrder(null); setIsModalOpen(true); };
 
   const handleEdit = (order) => {
-    if (!['новый', 'на_согласовании'].includes(order.status)) {
-      alert('Редактировать можно только новые заказы или на согласовании'); return;
-    }
     setEditingOrder(order); setIsModalOpen(true);
   };
 
@@ -173,12 +170,12 @@ const OrdersPage = () => {
                       <div className="action-buttons">
                         <button className="btn-icon" title="Редактировать"
                           onClick={() => handleEdit(order)}
-                          disabled={!['новый','на_согласовании'].includes(order.status)}>
+                          >
                           <Edit size={15} />
                         </button>
                         <button className="btn-icon danger" title="Удалить"
                           onClick={() => handleDelete(order.id)}
-                          disabled={order.status !== 'новый'}>
+                          >
                           <Trash2 size={15} />
                         </button>
                       </div>
@@ -203,3 +200,5 @@ const OrdersPage = () => {
 };
 
 export default OrdersPage;
+
+

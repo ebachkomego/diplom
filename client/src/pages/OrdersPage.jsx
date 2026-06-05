@@ -1,21 +1,32 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { ordersApi } from '../api/orders';
-import { Plus, Search, Filter, Eye, Edit, Trash2 } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Trash2, ChevronRight, Check, X, Send, Package } from 'lucide-react';
 import OrderModal from './OrderModal';
+import CreateTaskModal from './CreateTaskModal';
 import PrintActionButton from '../components/ui/PrintActionButton';
 import { usePagePrint } from '../hooks/usePagePrint';
 
 const TAB_ACTIVE  = ['новый', 'на_согласовании', 'подтверждён', 'в_производстве', 'готов'];
 const TAB_ARCHIVE = ['отгружен', 'завершён', 'отклонён'];
 
+const STATUS_ACTIONS = {
+  'новый':             [{ next: 'на_согласовании', label: 'На согласование', icon: ChevronRight, color: 'var(--color-info)' }, { next: 'отклонён', label: 'Отклонить', icon: X, color: 'var(--color-danger)' }],
+  'на_согласовании':   [{ next: 'подтверждён', label: 'Подтвердить', icon: Check, color: 'var(--color-success)' }, { next: 'отклонён', label: 'Отклонить', icon: X, color: 'var(--color-danger)' }],
+  'подтверждён':       [{ next: 'в_производстве', label: 'В производство', icon: Package, color: 'var(--color-primary)' }],
+  'в_производстве':    [{ next: 'готов', label: 'Готов', icon: Check, color: 'var(--color-success)' }],
+  'готов':             [{ next: 'отгружен', label: 'Отгрузить', icon: Send, color: 'var(--color-info)' }],
+  'отгружен':          [{ next: 'завершён', label: 'Завершить', icon: Check, color: 'var(--color-success)' }],
+};
+
 const OrdersPage = () => {
-  const [orders, setOrders]             = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [search, setSearch]             = useState('');
+  const [orders, setOrders]           = useState([]);
+  const [loading, setLoading]         = useState(true);
+  const [search, setSearch]           = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [activeTab, setActiveTab]       = useState('active');
-  const [isModalOpen, setIsModalOpen]   = useState(false);
+  const [activeTab, setActiveTab]     = useState('active');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState(null);
+  const [taskOrder, setTaskOrder]     = useState(null);
   const printPage = usePagePrint('Заказы');
 
   const fetchOrders = async () => {
@@ -48,13 +59,25 @@ const OrdersPage = () => {
     catch (e) { alert(e.response?.data?.error || 'Ошибка удаления'); }
   };
 
+  const handleStatusChange = async (order, nextStatus) => {
+    if (nextStatus === 'в_производстве') {
+      setTaskOrder(order);
+      return;
+    }
+    try {
+      await ordersApi.changeStatus(order.id, nextStatus);
+      fetchOrders();
+    } catch (e) {
+      alert(e.response?.data?.error || 'Ошибка смены статуса');
+    }
+  };
+
   const fmt = (val) => new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'BYN', maximumFractionDigits: 0 }).format(val);
 
   const switchTab = (tab) => { setActiveTab(tab); setStatusFilter(''); };
 
   return (
     <div className="page-container animate-fade-in">
-      {/* Header */}
       <div className="page-header flex-between">
         <div>
           <h1>Управление заказами</h1>
@@ -68,7 +91,6 @@ const OrdersPage = () => {
         </div>
       </div>
 
-      {/* Tabs */}
       <div style={{ display: 'flex', gap: '0', marginBottom: '1.5rem', borderBottom: '2px solid var(--color-border)' }}>
         {[['active', 'Активные заказы'], ['archive', 'Архив (Завершённые)']].map(([key, label]) => (
           <button
@@ -76,7 +98,7 @@ const OrdersPage = () => {
             onClick={() => switchTab(key)}
             style={{
               padding: '0.6rem 1.5rem',
-              background: activeTab === key ? 'rgba(255, 255, 255, 0.1)' : 'none', /* Background highlight for active tab */
+              background: activeTab === key ? 'rgba(255, 255, 255, 0.1)' : 'none',
               border: 'none',
               borderBottom: activeTab === key ? '3px solid #ffffff' : '3px solid transparent',
               borderRadius: '8px 8px 0 0',
@@ -93,7 +115,6 @@ const OrdersPage = () => {
         ))}
       </div>
 
-      {/* Controls */}
       <div className="controls-bar">
         <div className="search-box">
           <Search size={16} className="search-icon" />
@@ -127,7 +148,6 @@ const OrdersPage = () => {
         </div>
       </div>
 
-      {/* Table */}
       <div className="glass-panel" style={{ overflow: 'hidden' }}>
         {loading ? (
           <div className="loader-container">Загрузка...</div>
@@ -152,36 +172,50 @@ const OrdersPage = () => {
                       Нет заказов, соответствующих фильтрам
                     </td>
                   </tr>
-                ) : displayed.map(order => (
-                  <tr key={order.id}>
-                    <td className="font-medium text-primary">{order.order_number}</td>
-                    <td>{new Date(order.created_at).toLocaleDateString('ru-RU')}</td>
-                    <td>{order.customer_name}</td>
-                    <td className="font-medium">{fmt(order.total_cost)}</td>
-                    <td>
-                      <span className={`badge-status status-${order.status.replace(/_/g, '-')}`}>
-                        {order.status.replace(/_/g, ' ')}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={`badge-priority priority-${order.priority}`}>{order.priority}</span>
-                    </td>
-                    <td className="no-print">
-                      <div className="action-buttons">
-                        <button className="btn-icon" title="Редактировать"
-                          onClick={() => handleEdit(order)}
-                          >
-                          <Edit size={15} />
-                        </button>
-                        <button className="btn-icon danger" title="Удалить"
-                          onClick={() => handleDelete(order.id)}
-                          >
-                          <Trash2 size={15} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                ) : displayed.map(order => {
+                  const actions = STATUS_ACTIONS[order.status] || [];
+                  return (
+                    <tr key={order.id}>
+                      <td className="font-medium text-primary">{order.order_number}</td>
+                      <td>{new Date(order.created_at).toLocaleDateString('ru-RU')}</td>
+                      <td>{order.customer_name}</td>
+                      <td className="font-medium">{fmt(order.total_cost)}</td>
+                      <td>
+                        <span className={`badge-status status-${order.status.replace(/_/g, '-')}`}>
+                          {order.status.replace(/_/g, ' ')}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={`badge-priority priority-${order.priority}`}>{order.priority}</span>
+                      </td>
+                      <td className="no-print">
+                        <div className="action-buttons">
+                          {actions.map((act, i) => (
+                            <button
+                              key={i}
+                              className="btn-icon"
+                              title={act.label}
+                              onClick={() => handleStatusChange(order, act.next)}
+                              style={{ color: act.color }}
+                            >
+                              <act.icon size={15} />
+                            </button>
+                          ))}
+                          {order.status === 'новый' && (
+                            <button className="btn-icon" title="Редактировать" onClick={() => handleEdit(order)}>
+                              <Edit size={15} />
+                            </button>
+                          )}
+                          {order.status === 'новый' && (
+                            <button className="btn-icon danger" title="Удалить" onClick={() => handleDelete(order.id)}>
+                              <Trash2 size={15} />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -195,10 +229,16 @@ const OrdersPage = () => {
           onSave={fetchOrders}
         />
       )}
+
+      {taskOrder && (
+        <CreateTaskModal
+          order={taskOrder}
+          onClose={() => setTaskOrder(null)}
+          onSave={fetchOrders}
+        />
+      )}
     </div>
   );
 };
 
 export default OrdersPage;
-
-

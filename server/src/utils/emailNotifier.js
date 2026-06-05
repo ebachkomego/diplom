@@ -1,17 +1,36 @@
 const nodemailer = require('nodemailer');
+const db = require('../database/connection');
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+const getTransporter = async () => {
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const port = parseInt(process.env.SMTP_PORT || '587');
+  let user = process.env.SMTP_USER;
+  let pass = process.env.SMTP_PASS;
+
+  if (!user || !pass) {
+    const [userRow, passRow] = await Promise.all([
+      db('settings').where({ key: 'smtp_user' }).first(),
+      db('settings').where({ key: 'smtp_pass' }).first(),
+    ]);
+    user = userRow?.value;
+    pass = passRow?.value;
+  }
+
+  if (!user || !pass) return null;
+
+  return nodemailer.createTransport({
+    host,
+    port,
+    secure: false,
+    auth: { user, pass },
+  });
+};
 
 const sendLoginNotification = async (toEmail, user, ip, userAgent) => {
-  if (!toEmail || !process.env.SMTP_USER) return;
+  if (!toEmail) return;
+
+  const transporter = await getTransporter();
+  if (!transporter) return;
 
   const now = new Date();
   const dateStr = now.toLocaleString('ru-RU', {
@@ -67,7 +86,7 @@ const sendLoginNotification = async (toEmail, user, ip, userAgent) => {
 
   try {
     await transporter.sendMail({
-      from: process.env.SMTP_USER,
+      from: user,
       to: toEmail,
       subject: 'Оповещение о входе в систему — ОАО «ТАиМ»',
       html,

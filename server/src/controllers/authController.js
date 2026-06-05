@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../database/connection');
 const { JWT_SECRET } = require('../middleware/auth');
+const { sendLoginNotification } = require('../utils/emailNotifier');
 
 // POST /api/auth/login — вход в систему
 const login = async (req, res, next) => {
@@ -37,6 +38,15 @@ const login = async (req, res, next) => {
       JWT_SECRET,
       { expiresIn: '8h' }
     );
+
+    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress;
+    const userAgent = req.headers['user-agent'];
+
+    db('settings').where({ key: 'notification_email' }).first()
+      .then(row => {
+        if (row?.value) sendLoginNotification(row.value, user, ip, userAgent);
+      })
+      .catch(() => {});
 
     res.json({
       token,

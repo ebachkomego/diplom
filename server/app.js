@@ -17,6 +17,7 @@ const reportsRoutes = require('./src/routes/reports');
 const usersRoutes = require('./src/routes/users');
 const uiRoutes = require('./src/routes/ui');
 const transfersRoutes = require('./src/routes/transfers');
+const settingsRoutes = require('./src/routes/settings');
 
 // Импорт обработчика ошибок
 const errorHandler = require('./src/middleware/errorHandler');
@@ -49,6 +50,7 @@ app.use('/api/reports', reportsRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/ui', uiRoutes);
 app.use('/api/transfers', transfersRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // Проверка работоспособности сервера
 app.get('/api/health', (req, res) => {

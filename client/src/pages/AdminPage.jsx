@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import apiClient from '../api/client';
-import { UserPlus, ToggleLeft, ToggleRight, Trash2, Shield, User as UserIcon, UserCog } from 'lucide-react';
+import { settingsApi } from '../api/settings';
+import { UserPlus, ToggleLeft, ToggleRight, Trash2, Shield, User as UserIcon, UserCog, Bell, Save } from 'lucide-react';
 import UserModal from './UserModal';
 import PrintActionButton from '../components/ui/PrintActionButton';
 import { usePagePrint } from '../hooks/usePagePrint';
@@ -9,6 +10,9 @@ const AdminPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [notifEmail, setNotifEmail] = useState('');
+  const [notifEmailLoading, setNotifEmailLoading] = useState(false);
+  const [notifSaved, setNotifSaved] = useState(false);
   const printPage = usePagePrint('Управление пользователями');
 
   const fetchUsers = async () => {
@@ -25,7 +29,22 @@ const AdminPage = () => {
 
   useEffect(() => {
     fetchUsers();
+    settingsApi.getNotificationEmail().then(data => setNotifEmail(data.email)).catch(() => {});
   }, []);
+
+  const handleSaveNotifEmail = async () => {
+    setNotifEmailLoading(true);
+    setNotifSaved(false);
+    try {
+      await settingsApi.updateNotificationEmail(notifEmail);
+      setNotifSaved(true);
+      setTimeout(() => setNotifSaved(false), 3000);
+    } catch (e) {
+      alert(e.response?.data?.error || 'Ошибка сохранения email');
+    } finally {
+      setNotifEmailLoading(false);
+    }
+  };
 
   const handleToggle = async (id, isActive) => {
     try {
@@ -78,6 +97,33 @@ const AdminPage = () => {
             <UserPlus size={16} />
             Добавить пользователя
           </button>
+        </div>
+      </div>
+
+      {/* Email уведомлений */}
+      <div className="glass-panel" style={{ padding: '1.25rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+          <Bell size={20} style={{ color: 'var(--color-primary)' }} />
+          <h3 style={{ margin: 0, fontSize: '1rem' }}>Уведомления о входе в систему</h3>
+        </div>
+        <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>
+          На указанный email будут приходить оповещения при каждом входе пользователей в систему.
+        </p>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <div className="form-group" style={{ margin: 0, flex: 1, maxWidth: 360 }}>
+            <input
+              type="email"
+              value={notifEmail}
+              onChange={e => setNotifEmail(e.target.value)}
+              placeholder="wioltut25012007@gmail.com"
+            />
+          </div>
+          <button className="btn-primary" onClick={handleSaveNotifEmail} disabled={notifEmailLoading} style={{ marginTop: 0 }}>
+            <Save size={15} /> {notifEmailLoading ? 'Сохранение…' : 'Сохранить'}
+          </button>
+          {notifSaved && (
+            <span style={{ color: 'var(--color-success)', fontSize: '0.85rem', fontWeight: 600 }}>Сохранено</span>
+          )}
         </div>
       </div>
 

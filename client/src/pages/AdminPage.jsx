@@ -137,7 +137,7 @@ const AdminPage = () => {
               type="email"
               value={notifEmail}
               onChange={e => setNotifEmail(e.target.value)}
-              placeholder="bgdfs0422@gmail.com"
+              placeholder="wioltut25012007@gmail.com"
             />
           </div>
           <button className="btn-primary" onClick={handleSaveNotifEmail} disabled={notifEmailLoading} style={{ marginTop: 0 }}>

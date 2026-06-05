@@ -29,7 +29,13 @@ const getTransporter = async () => {
 const sendLoginNotification = async (toEmail, user, ip, userAgent) => {
   if (!toEmail) return;
 
-  const transporter = await getTransporter();
+  let transporter;
+  try {
+    transporter = await getTransporter();
+  } catch (err) {
+    console.error('Ошибка создания транспорта:', err.message);
+    return;
+  }
   if (!transporter) return;
 
   const now = new Date();

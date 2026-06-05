@@ -20,26 +20,48 @@ const sendLoginNotification = async (toEmail, user, ip, userAgent) => {
   });
 
   const html = `
-    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 24px; border: 1px solid #e0e0e0; border-radius: 8px;">
-      <div style="text-align: center; margin-bottom: 20px;">
-        <h2 style="color: #1a5276; margin: 0;">&#9888;&#65039; Оповещение о входе</h2>
-        <p style="color: #666; font-size: 14px;">ОАО «ТАиМ» — Система управления производством</p>
+    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
+      <div style="background: linear-gradient(135deg, #1a5276, #2e86c1); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+        <div style="font-size: 48px; margin-bottom: 8px;">&#128274;</div>
+        <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 600;">Оповещение о входе в систему</h1>
+        <p style="color: #d4e6f1; margin: 6px 0 0 0; font-size: 14px;">ОАО «ТАиМ» — Система управления производством</p>
       </div>
-      <div style="background: #f8f9fa; border-radius: 6px; padding: 16px; margin-bottom: 16px;">
+      <div style="border: 1px solid #e8e8e8; border-top: none; border-radius: 0 0 12px 12px; padding: 28px;">
+        <p style="color: #333; font-size: 15px; margin: 0 0 20px 0;">Зафиксирован вход в систему. Ниже приведены подробности:</p>
         <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-          <tr><td style="padding: 6px 8px; color: #555; width: 120px;">Пользователь</td><td style="padding: 6px 8px; font-weight: 600;">${user.full_name} (${user.username})</td></tr>
-          <tr><td style="padding: 6px 8px; color: #555;">Роль</td><td style="padding: 6px 8px;">${user.role.replace(/_/g, ' ')}</td></tr>
-          <tr><td style="padding: 6px 8px; color: #555;">Дата и время</td><td style="padding: 6px 8px; font-weight: 600;">${dateStr}</td></tr>
-          <tr><td style="padding: 6px 8px; color: #555;">IP-адрес</td><td style="padding: 6px 8px; font-family: monospace;">${ip || 'не определён'}</td></tr>
-          <tr><td style="padding: 6px 8px; color: #555;">Браузер</td><td style="padding: 6px 8px; font-size: 12px; color: #666;">${userAgent || 'не определён'}</td></tr>
+          <tr style="border-bottom: 1px solid #f0f0f0;">
+            <td style="padding: 10px 12px; color: #888; width: 130px;">Пользователь</td>
+            <td style="padding: 10px 12px; font-weight: 600; color: #1a1a1a;">${user.full_name}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f0f0f0;">
+            <td style="padding: 10px 12px; color: #888;">Логин</td>
+            <td style="padding: 10px 12px; font-weight: 600; color: #1a1a1a;">${user.username}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f0f0f0;">
+            <td style="padding: 10px 12px; color: #888;">Роль</td>
+            <td style="padding: 10px 12px;">${user.role.replace(/_/g, ' ')}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f0f0f0;">
+            <td style="padding: 10px 12px; color: #888;">Дата и время</td>
+            <td style="padding: 10px 12px; font-weight: 600; color: #1a1a1a;">${dateStr}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #f0f0f0;">
+            <td style="padding: 10px 12px; color: #888;">IP-адрес</td>
+            <td style="padding: 10px 12px; font-family: 'Consolas', monospace; color: #1a1a1a;">${ip || 'не определён'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 12px; color: #888;">Браузер</td>
+            <td style="padding: 10px 12px; font-size: 13px; color: #666; word-break: break-all;">${userAgent || 'не определён'}</td>
+          </tr>
         </table>
+        <div style="background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 6px; padding: 14px 16px; margin-top: 20px; font-size: 13px; color: #6d4c00;">
+          &#9888;&#65039; Если это были не Вы, <strong>немедленно смените пароль</strong> и обратитесь к администратору системы.
+        </div>
+        <hr style="border: none; border-top: 1px solid #e8e8e8; margin: 24px 0 12px 0;">
+        <p style="color: #aaa; font-size: 12px; margin: 0; text-align: center;">
+          Автоматическое уведомление, сформированное системой управления производством ОАО «ТАиМ». Ответ не требуется.
+        </p>
       </div>
-      <div style="background: #fff3cd; border-radius: 6px; padding: 12px; font-size: 13px; color: #856404;">
-        Если это были не Вы, <strong>немедленно смените пароль</strong> и свяжитесь с администратором системы.
-      </div>
-      <p style="color: #999; font-size: 11px; margin-top: 20px; text-align: center;">
-        Автоматическое уведомление. Отвечать не требуется.
-      </p>
     </div>
   `;
 

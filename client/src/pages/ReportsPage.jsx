@@ -4,12 +4,13 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import PrintActionButton from '../components/ui/PrintActionButton';
 import { usePagePrint } from '../hooks/usePagePrint';
 import { useNavigate } from 'react-router-dom';
-import { LayoutDashboard, PieChart, TrendingUp, Cpu } from 'lucide-react';
+import { LayoutDashboard, PieChart, TrendingUp, Cpu, AlertCircle } from 'lucide-react';
 
 const ReportsPage = () => {
   const [resourceLoad, setResourceLoad] = useState([]);
   const [planFact, setPlanFact] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
   const printPage = usePagePrint('Отчеты и аналитика');
   const navigate = useNavigate();
 
@@ -24,6 +25,8 @@ const ReportsPage = () => {
         setPlanFact(pf.data);
       } catch (error) {
         console.error('Ошибка загрузки отчетов', error);
+        const msg = error.response?.data?.error || error.message || 'Неизвестная ошибка';
+        setErrorMessage(msg);
       } finally {
         setLoading(false);
       }
@@ -46,6 +49,13 @@ const ReportsPage = () => {
           <PrintActionButton onClick={printPage} />
         </div>
       </div>
+
+      {errorMessage && (
+        <div style={{ padding: '0.75rem 1rem', marginBottom: '1rem', background: 'rgba(220, 38, 38, 0.1)', border: '1px solid var(--color-danger)', borderRadius: '8px', color: 'var(--color-danger)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <AlertCircle size={18} />
+          <span>{errorMessage}</span>
+        </div>
+      )}
 
       <div className="dashboard-grid" style={{ gridTemplateColumns: '1fr' }}>
         {/* График План-Факт */}

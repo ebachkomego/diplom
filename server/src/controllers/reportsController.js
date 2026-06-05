@@ -155,9 +155,9 @@ const getPlanFact = async (req, res, next) => {
       .select(
         'p.name as product_name',
         db.raw('SUM(pt.quantity) as planned_qty'),
-        db.raw('SUM(CASE WHEN pt.status = "завершено" THEN pt.quantity ELSE 0 END) as actual_qty'),
+        db.raw("SUM(CASE WHEN pt.status = 'завершено' THEN pt.quantity ELSE 0 END) as actual_qty"),
         db.raw('COUNT(*) as total_tasks'),
-        db.raw('COUNT(CASE WHEN pt.status = "завершено" THEN 1 END) as completed_tasks')
+        db.raw("COUNT(CASE WHEN pt.status = 'завершено' THEN 1 END) as completed_tasks")
       )
       .groupBy('pt.product_id')
       .orderBy('planned_qty', 'desc')

@@ -141,7 +141,7 @@ const getResourceLoad = async (req, res, next) => {
         'r.id', 'r.name', 'r.type', 'r.capacity', 'r.status',
         db.raw('COUNT(ts.id) as active_tasks')
       )
-      .groupBy('r.id')
+      .groupBy('r.id', 'r.name', 'r.type', 'r.capacity', 'r.status')
       .orderBy('r.name');
     res.json(data);
   } catch (error) { next(error); }
@@ -159,7 +159,7 @@ const getPlanFact = async (req, res, next) => {
         db.raw('COUNT(*) as total_tasks'),
         db.raw("COUNT(CASE WHEN pt.status = 'завершено' THEN 1 END) as completed_tasks")
       )
-      .groupBy('pt.product_id')
+      .groupBy('pt.product_id', 'p.name')
       .orderBy('planned_qty', 'desc')
       .limit(10);
     res.json(data);
@@ -241,7 +241,7 @@ const queryChartBuilder = async (req, res, next) => {
         db.raw(`${dimensionExpr} as label`),
         db.raw(`${aggFn}(${metricExpr}) as value`)
       )
-      .groupBy('label')
+      .groupByRaw(dimensionExpr)
       .orderBy('value', 'desc')
       .limit(20);
 

@@ -4,7 +4,7 @@ import { productionApi } from '../api/production';
 import { X, Play, AlertTriangle } from 'lucide-react';
 
 const STATUS_LABELS = {
-  'новий': 'Новый',
+  'новый': 'Новый',
   'на_согласовании': 'На согласовании',
   'подтверждён': 'Подтверждён',
   'в_производстве': 'В производстве',

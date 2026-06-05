@@ -8,5 +8,13 @@ export const settingsApi = {
   updateNotificationEmail: async (email) => {
     const response = await apiClient.put('/settings/notification-email', { email });
     return response.data;
+  },
+  getSmtpSettings: async () => {
+    const response = await apiClient.get('/settings/smtp');
+    return response.data;
+  },
+  updateSmtpSettings: async (smtp_user, smtp_pass) => {
+    const response = await apiClient.put('/settings/smtp', { smtp_user, smtp_pass });
+    return response.data;
   }
 };

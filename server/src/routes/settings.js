@@ -9,5 +9,7 @@ router.use(roleGuard('администратор'));
 
 router.get('/notification-email', ctrl.getNotificationEmail);
 router.put('/notification-email', ctrl.updateNotificationEmail);
+router.get('/smtp', ctrl.getSmtpSettings);
+router.put('/smtp', ctrl.updateSmtpSettings);
 
 module.exports = router;

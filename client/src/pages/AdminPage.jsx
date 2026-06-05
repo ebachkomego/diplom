@@ -13,6 +13,10 @@ const AdminPage = () => {
   const [notifEmail, setNotifEmail] = useState('');
   const [notifEmailLoading, setNotifEmailLoading] = useState(false);
   const [notifSaved, setNotifSaved] = useState(false);
+  const [smtpUser, setSmtpUser] = useState('');
+  const [smtpPass, setSmtpPass] = useState('');
+  const [smtpLoading, setSmtpLoading] = useState(false);
+  const [smtpSaved, setSmtpSaved] = useState(false);
   const printPage = usePagePrint('Управление пользователями');
 
   const fetchUsers = async () => {
@@ -30,6 +34,10 @@ const AdminPage = () => {
   useEffect(() => {
     fetchUsers();
     settingsApi.getNotificationEmail().then(data => setNotifEmail(data.email)).catch(() => {});
+    settingsApi.getSmtpSettings().then(data => {
+      setSmtpUser(data.smtp_user);
+      setSmtpPass(data.smtp_pass);
+    }).catch(() => {});
   }, []);
 
   const handleSaveNotifEmail = async () => {
@@ -43,6 +51,20 @@ const AdminPage = () => {
       alert(e.response?.data?.error || 'Ошибка сохранения email');
     } finally {
       setNotifEmailLoading(false);
+    }
+  };
+
+  const handleSaveSmtp = async () => {
+    setSmtpLoading(true);
+    setSmtpSaved(false);
+    try {
+      await settingsApi.updateSmtpSettings(smtpUser, smtpPass);
+      setSmtpSaved(true);
+      setTimeout(() => setSmtpSaved(false), 3000);
+    } catch (e) {
+      alert(e.response?.data?.error || 'Ошибка сохранения SMTP');
+    } finally {
+      setSmtpLoading(false);
     }
   };
 
@@ -115,13 +137,50 @@ const AdminPage = () => {
               type="email"
               value={notifEmail}
               onChange={e => setNotifEmail(e.target.value)}
-              placeholder="wioltut25012007@gmail.com"
+              placeholder="bgdfs0422@gmail.com"
             />
           </div>
           <button className="btn-primary" onClick={handleSaveNotifEmail} disabled={notifEmailLoading} style={{ marginTop: 0 }}>
             <Save size={15} /> {notifEmailLoading ? 'Сохранение…' : 'Сохранить'}
           </button>
           {notifSaved && (
+            <span style={{ color: 'var(--color-success)', fontSize: '0.85rem', fontWeight: 600 }}>Сохранено</span>
+          )}
+        </div>
+      </div>
+
+      {/* SMTP настройки */}
+      <div className="glass-panel" style={{ padding: '1.25rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+          <Bell size={20} style={{ color: 'var(--color-primary)' }} />
+          <h3 style={{ margin: 0, fontSize: '1rem' }}>SMTP-сервер (исходящая почта)</h3>
+        </div>
+        <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>
+          Настройки для отправки email-уведомлений (Gmail, Яндекс и т.д.)
+        </p>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+          <div className="form-group" style={{ margin: 0, flex: 1, minWidth: 240, maxWidth: 320 }}>
+            <label style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: 4, display: 'block' }}>Email отправителя</label>
+            <input
+              type="email"
+              value={smtpUser}
+              onChange={e => setSmtpUser(e.target.value)}
+              placeholder="bgdfs0422@gmail.com"
+            />
+          </div>
+          <div className="form-group" style={{ margin: 0, flex: 1, minWidth: 240, maxWidth: 320 }}>
+            <label style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: 4, display: 'block' }}>Пароль / App Password</label>
+            <input
+              type="password"
+              value={smtpPass}
+              onChange={e => setSmtpPass(e.target.value)}
+              placeholder="•••• •••• •••• ••••"
+            />
+          </div>
+          <button className="btn-primary" onClick={handleSaveSmtp} disabled={smtpLoading} style={{ marginTop: 0 }}>
+            <Save size={15} /> {smtpLoading ? 'Сохранение…' : 'Сохранить'}
+          </button>
+          {smtpSaved && (
             <span style={{ color: 'var(--color-success)', fontSize: '0.85rem', fontWeight: 600 }}>Сохранено</span>
           )}
         </div>

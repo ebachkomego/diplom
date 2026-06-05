@@ -4,8 +4,8 @@
   "env": {
     "SMTP_HOST": "smtp.gmail.com",
     "SMTP_PORT": "587",
-    "SMTP_USER": "dysj1055@gmail.com",
-    "SMTP_PASS": "LazArt25"
+    "SMTP_USER": "bgdfs0422@gmail.com",
+    "SMTP_PASS": "aatb akue uouh imme"
   },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.js" },

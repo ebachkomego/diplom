@@ -10,7 +10,7 @@ exports.up = async function(knex) {
   });
 
   await knex('settings').insert([
-    { key: 'notification_email', value: 'wioltut25012007@gmail.com' }
+    { key: 'notification_email', value: 'bgdfs0422@gmail.com' }
   ]);
 };
 

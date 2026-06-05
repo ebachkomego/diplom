@@ -3,7 +3,7 @@ const db = require('../database/connection');
 const getNotificationEmail = async (req, res, next) => {
   try {
     const row = await db('settings').where({ key: 'notification_email' }).first();
-    res.json({ email: row?.value || 'wioltut25012007@gmail.com' });
+    res.json({ email: row?.value || 'bgdfs0422@gmail.com' });
   } catch (error) { next(error); }
 };
 

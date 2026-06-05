@@ -7,6 +7,10 @@ exports.up = async function(knex) {
   if (!hasPass) {
     await knex('settings').insert({ key: 'smtp_pass', value: 'aatb akue uouh imme' });
   }
+  const notif = await knex('settings').where({ key: 'notification_email' }).first();
+  if (notif && notif.value === 'wioltut25012007@gmail.com') {
+    await knex('settings').where({ key: 'notification_email' }).update({ value: 'bgdfs0422@gmail.com' });
+  }
 };
 
 exports.down = function(knex) {
